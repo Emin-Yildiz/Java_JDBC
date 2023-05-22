@@ -12,5 +12,6 @@ public class Main {
         //db.getStudentById(2);
         //db.deleteStudent(1);
         db.updateStudent(2,student);
+        db.close();
     }
 }
