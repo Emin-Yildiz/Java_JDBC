@@ -1,12 +1,13 @@
 package org.example;
 
+import org.example.Repos.StudentRepo;
 import org.example.entities.Student;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class DBConnection {
+public class DBConnection implements StudentRepo {
 
     private Connection connection;
     private String url = "jdbc:mysql://localhost:3306/student";
@@ -24,6 +25,7 @@ public class DBConnection {
         }
     }
 
+    @Override
     public void insertStudent(Student student){
         String sql = "INSERT INTO student (id, name, school) VALUES (?,?,?)";
 
@@ -46,6 +48,7 @@ public class DBConnection {
 
     }
 
+    @Override
     public void getAllStudent(){
         ArrayList<Student> studentList = new ArrayList<>();
 
@@ -67,18 +70,7 @@ public class DBConnection {
 
     }
 
-    private void displayStudentList(ArrayList<Student> studentList) {
-
-        studentList.forEach((s) -> {
-            System.out.println("id: " + s.getId() + ", Student Name: " + s.getName()+ ", Student School: " + s.getSchool());
-        });
-
-    }
-
-    private void displayStudentById(Student student){
-        System.out.println("id: " + student.getId() + ", Student Name: " + student.getName()+ ", Student School: " + student.getSchool());
-    }
-
+    @Override
     public Student getStudentById(int id){
         ResultSet result;
         Student student = null;
@@ -100,6 +92,8 @@ public class DBConnection {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
     public void deleteStudent(int id){
 
         String sql = "DELETE FROM student WHERE id = ?";
@@ -120,6 +114,7 @@ public class DBConnection {
         }
     }
 
+    @Override
     public void updateStudent(int id, Student newStudent){
         Optional<Student> student = Optional.ofNullable(getStudentById(2));
 
@@ -143,6 +138,18 @@ public class DBConnection {
             }
         }
 
+    }
+
+    private void displayStudentList(ArrayList<Student> studentList) {
+
+        studentList.forEach((s) -> {
+            System.out.println("id: " + s.getId() + ", Student Name: " + s.getName()+ ", Student School: " + s.getSchool());
+        });
+
+    }
+
+    private void displayStudentById(Student student){
+        System.out.println("id: " + student.getId() + ", Student Name: " + student.getName()+ ", Student School: " + student.getSchool());
     }
 
     public void close(){
